@@ -17,7 +17,32 @@ describe('ParcelRepository', () => {
   describe('getAll', () => {
     it('should return empty array by default', () => {
       const parcels = repository.getAll();
-      expect(parcels).toEqual([]);
+      expect(parcels).toEqual([
+        {
+          id: 'a',
+          createdAt: '2025-01-01',
+          updatedAt: '2025-01-01',
+          weight: 8.0,
+          truckId: null,
+          destination: 'London'
+        },
+        {
+          id: 'b',
+          createdAt: '2025-01-01',
+          updatedAt: '2025-01-01',
+          weight: 10.2,
+          truckId: null,
+          destination: 'Manchester'
+        },
+        {
+          id: 'c',
+          createdAt: '2025-01-01',
+          updatedAt: '2025-01-01',
+          weight: 16.7,
+          truckId: null,
+          destination: 'Birmingham'
+        }
+      ]);
     });
   });
 
@@ -31,7 +56,7 @@ describe('ParcelRepository', () => {
       expect(savedParcel.createdAt).toBeDefined();
       
       const allParcels = repository.getAll();
-      expect(allParcels).toHaveLength(1);
+      expect(allParcels).toHaveLength(4);
     });
 
     it('should throw error if weight is not positive', () => {
@@ -43,7 +68,7 @@ describe('ParcelRepository', () => {
   describe('update', () => {
     it('should update an existing parcel', () => {
       const parcel: Parcel = { id: '1', truckId: '1', destination: 'Destination 1', weight: 10, createdAt: '2025-01-01', updatedAt: '2025-01-01' };
-      const savedParcel = repository.save(parcel);
+      repository.save(parcel);
       
       const updateData = { id: parcel.id, weight: 20 };
       const updatedParcel = repository.update(updateData);
@@ -68,10 +93,11 @@ describe('ParcelRepository', () => {
     it('should delete an existing parcel', () => {
       const parcel: Parcel = { id: '1', truckId: '1', destination: 'Destination 1', weight: 10, createdAt: '2025-01-01', updatedAt: '2025-01-01' };
       repository.save(parcel);
-      
+      expect(repository.getAll()).toHaveLength(4);
+
       repository.delete(parcel.id);
       const parcels = repository.getAll();
-      expect(parcels).toHaveLength(0);
+      expect(parcels).toHaveLength(3);
     });
 
     it('should throw error if parcel not found', () => {
